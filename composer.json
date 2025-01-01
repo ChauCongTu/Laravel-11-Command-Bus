@@ -37,7 +37,10 @@
         },
         "files": [
             "app/Helpers/ResponseHelper.php",
-            "app/Constants/ResponseMessage.php"
+            "app/Constants/ResponseMessage.php",
+            "app/Constants/Extension.php",
+            "app/Constants/RoleUuid.php",
+            "app/Constants/GenderId.php"
         ]
     },
     "autoload-dev": {

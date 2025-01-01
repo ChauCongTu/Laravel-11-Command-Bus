@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -9,5 +10,15 @@ Route::middleware(['Role:1'])->get('/demo', function () {
 });
 
 Route::prefix('/v1')->group(function ($route) {
-    $route->resource('/users', UserController::class)->except(['create', 'edit']);
-})->name('first_version.');
+    $route->prefix('/auth')->group(function ($route) {
+        $route->post('/signin', [AuthController::class, 'login'])->name('login');
+        $route->post('/signup', [AuthController::class, 'register'])->name('register');
+    })->name('auth.');
+    $route->middleware(['Authorized'])->group(function ($route) {
+        $route->resource('/users', UserController::class)->except(['create', 'edit']);
+
+        $route->prefix('/auth')->group(function ($route) {
+            $route->post('/avatar', [UserController::class, 'avatar'])->name('avatar');
+        })->name('auth.');
+    });
+})->name('v1.');

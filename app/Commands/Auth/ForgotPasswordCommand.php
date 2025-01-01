@@ -1,7 +1,7 @@
 <?php
-namespace App\Commands\Category;
+namespace App\Commands\Auth;
 
-class GetCategoryCommand
+class ForgotPasswordCommand
 {
     public $attribute;
 

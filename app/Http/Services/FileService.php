@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Infrastucture\Service;
+namespace App\Http\Services;
 
+use App\Commands\Files\SaveFileCommand;
+use App\Models\FileStorage;
 use Illuminate\Support\Facades\Storage;
-use Str;
 
 class FileService
 {
@@ -12,24 +13,35 @@ class FileService
     {
         $this->storageType = app()->isLocal() ? 'public' : 's3';
     }
-    public function upload($file, $path)
+    public function upload($file, $path, $fileName = null, $extension = null)
     {
-        $path = date('Y-m-d') . '/' . $path;
-        $extension = $file->getClientOriginalExtension();
-        $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $path = $fileName ? $path : date('Y-m-d') . '/' . $path;
+        $extension = $extension ?? $file->getClientOriginalExtension();
+        $filename = $fileName ?? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 
-        $filenameToStore = $path . '/' . $filename . '_' . time() . '.' . $extension;
+        $storagePath = $path . '/' . $filename . '.' . $extension;
 
-        $isUploaded = Storage::disk($this->storageType)->put($filenameToStore, file_get_contents($file->getRealPath()));
-        $url = $isUploaded ? Storage::disk($this->storageType)->url($filenameToStore) : '';
+        if ($fileName && Storage::disk($this->storageType)->exists($storagePath)) {
+            Storage::disk($this->storageType)->delete($storagePath);
+        }
+
+        $isUploaded = Storage::disk($this->storageType)->putFileAs($path, $file, $filename . '.' . $extension);
+
+        if (!$isUploaded) {
+            throw new \Exception('File upload failed.');
+        }
+
+        $url = Storage::disk($this->storageType)->url($storagePath);
 
         return [
-            'path' => app()->isLocal() ? 'storage/' . $filenameToStore : $filenameToStore,
-            'originalName' => $filename,
+            'path' => app()->isLocal() ? 'storage/' . $storagePath : $storagePath,
+            'fileName' => $fileName . '.' . $extension,
+            'originalName' => $file->getClientOriginalName(),
             'ext' => $extension,
             'url' => $url,
         ];
     }
+
     public function delete($path)
     {
         $storagePath = str_replace('storage/', '', $path);
@@ -39,5 +51,22 @@ class FileService
             return true;
         }
         return false;
+    }
+    public function save(SaveFileCommand $saveFileCommand)
+    {
+        $files = FileStorage::create([
+            'path' => $saveFileCommand->getPath(),
+            'original_name' => $saveFileCommand->getOriginalName(),
+            'ext' => $saveFileCommand->getExt(),
+            'file_name' => $saveFileCommand->getFileName(),
+            'url' => $saveFileCommand->getUrl(),
+            'upload_by' => $saveFileCommand->getUploadBy(),
+        ]);
+
+        return $files;
+    }
+    public function destroy($url)
+    {
+        FileStorage::where('url', $url)->delete();
     }
 }

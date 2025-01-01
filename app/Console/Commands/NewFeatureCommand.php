@@ -31,7 +31,7 @@ class NewFeatureCommand extends Command
         ];
         $model = $this->argument('model');
 
-        Artisan::call('make:controller', ['name' => "{$model}Controller", '--api' => true]);
+        Artisan::call('make:controller', ['name' => "{$model}/{$model}Controller", '--api' => true]);
         Artisan::call('make:request', ['name' => "{$model}/Create{$model}Request"]);
         Artisan::call('make:request', ['name' => "{$model}/Filter{$model}Request"]);
         Artisan::call('make:request', ['name' => "{$model}/Update{$model}Request"]);

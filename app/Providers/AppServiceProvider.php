@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Console\CustomMakeRequest;
+use App\Http\Services\Repositories\UserServiceInterface;
+use App\Http\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,6 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singleton(UserServiceInterface::class, UserService::class);
     }
 
     /**

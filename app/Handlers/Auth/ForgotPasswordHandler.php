@@ -1,10 +1,10 @@
 <?php
-namespace App\Handlers\Category;
+namespace App\Handlers\Auth;
 
 use App\Exceptions\ServerException;
 use Illuminate\Support\Facades\DB;
 
-class UpdateCategoryHandler
+class ForgotPasswordHandler
 {
     public function handle($command)
     {
