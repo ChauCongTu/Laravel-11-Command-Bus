@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 
-class CreateCategoryRequest extends FormRequest
+class UpdateAvatarRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,7 +17,7 @@ class CreateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Viết rules vào đây
+            'avatar' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ];
     }
 

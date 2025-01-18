@@ -5,23 +5,21 @@ use App\Models\User;
 
 class UpdateUserCommand
 {
-    public $user;
-    public $email;
-    public $password;
-    public $first_name;
-    public $last_name;
-    public $gender;
-    public $phone;
-    public $bio;
-    public $avatar;
+    public User $user;
+    public string $email;
+    public string $firstName;
+    public string $lastName;
+    public string $gender;
+    public string $phone;
+    public ?string $bio;
+    public ?string $avatar;
 
     public function __construct(User $user, array $data)
     {
         $this->user = $user;
         $this->email = $data['email'] ?? null;
-        $this->password = $data['password'] ?? null;
-        $this->first_name = $data['first_name'] ?? null;
-        $this->last_name = $data['last_name'] ?? null;
+        $this->firstName = $data['firstName'] ?? null;
+        $this->lastName = $data['lastName'] ?? null;
         $this->gender = $data['gender'] ?? null;
         $this->phone = $data['phone'] ?? null;
         $this->bio = $data['bio'] ?? null;

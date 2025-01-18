@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->uuid('id');
             $table->string('path', 191);
-            $table->string('originalName', 255);
+            $table->string('original_name', 255);
             $table->string('ext', 5);
-            $table->string('type', 10);
+            $table->string('file_name', 255);
             $table->string('url', 191);
-            $table->foreignUuid('uploadBy')->references('id')->on('users');
+            $table->foreignUuid('upload_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

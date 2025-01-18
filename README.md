@@ -1,66 +1,179 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Command Bus Design Pattern Codebase
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Giới thiệu
 
-## About Laravel
+Dự án này sử dụng **Command Bus Design Pattern** để tổ chức mã nguồn một cách rõ ràng và dễ bảo trì. Cách tiếp cận này tách biệt logic nghiệp vụ ra khỏi các lớp Controller, đảm bảo khả năng mở rộng và bảo trì lâu dài.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Dự án được xây dựng trên **Laravel 11**, sử dụng các tính năng mới nhất của framework để cung cấp một nền tảng hiện đại, mạnh mẽ và hiệu quả cho phát triển ứng dụng.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Yêu cầu hệ thống
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **PHP**: Phiên bản 8.2 trở lên.
+- **Laravel**: Phiên bản 11.
+- **Database**: MySQL, PostgreSQL hoặc bất kỳ hệ quản trị cơ sở dữ liệu nào được Laravel hỗ trợ.
 
-## Learning Laravel
+## Hướng dẫn cài đặt
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Clone dự án:
+   ```bash
+   git clone https://github.com/username/your-project.git
+   cd your-project
+   ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2. Cài đặt các phụ thuộc:
+   ```bash
+   composer install
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. Tạo file `.env` và cấu hình:
+   ```bash
+   cp .env.example .env
+   ```
+   - Thiết lập thông tin kết nối cơ sở dữ liệu.
 
-## Laravel Sponsors
+4. Tạo key ứng dụng:
+   ```bash
+   php artisan key:generate
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5. Chạy migration và seed dữ liệu:
+   ```bash
+   php artisan migrate --seed
+   ```
 
-### Premium Partners
+6. Khởi động server:
+   ```bash
+   php artisan serve
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+7. Truy cập ứng dụng tại `http://localhost:8000`.
 
-## Contributing
+## Cấu trúc thư mục
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Dự án sử dụng cấu trúc thư mục sau để tổ chức mã nguồn:
 
-## Code of Conduct
+- `app/Commands`: Chứa các lớp lệnh (Command).
+- `app/Handlers`: Chứa các lớp xử lý lệnh (Handler).
+- `app/Http/Controllers`: Chứa các lớp Controller.
+- `app/Http/Requests`: Chứa các lớp yêu cầu (Request).
+- `app/Http/Resources`: Chứa các lớp tài nguyên (Resource).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Các tính năng chính
 
-## Security Vulnerabilities
+- **Tổ chức mã nguồn rõ ràng**: Mỗi tính năng được chia thành các lớp Command và Handler tương ứng.
+- **Dễ dàng mở rộng**: Thêm tính năng mới chỉ cần tạo các lớp Command và Handler mới.
+- **Đơn giản hóa Controller**: Chỉ chịu trách nhiệm gọi Command, không chứa logic nghiệp vụ.
+- **Tái sử dụng logic nghiệp vụ**: Các Command có thể được sử dụng ở nhiều nơi khác nhau.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Các tính năng tích hợp sẵn
 
-## License
+### API đầy đủ tính năng User
+- **GET**: Lấy thông tin người dùng.
+- **POST**: Tạo người dùng mới.
+- **PUT**: Cập nhật thông tin người dùng.
+- **DELETE**: Xóa người dùng.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Các tính năng Authentication
+- **Đăng nhập**: Quản lý phiên người dùng.
+- **Đăng ký**: Tạo tài khoản mới.
+- **Quên mật khẩu**: Gửi email đặt lại mật khẩu.
+
+### Các tính năng bổ sung
+- **Cập nhật avatar**: Người dùng có thể tải lên và thay đổi avatar.
+- **Phân quyền**: Hỗ trợ các vai trò khác nhau trong hệ thống.
+
+### Migration
+- Bao gồm một bảng thiết kế cơ sở dữ liệu cho một trang web Thương mại điện tử (TMĐT) cơ bản:
+  - **Users**: Thông tin người dùng.
+  - **Products**: Quản lý sản phẩm.
+  - **Orders**: Quản lý đơn hàng.
+  - **Order Items**: Chi tiết các sản phẩm trong đơn hàng.
+  - **Categories**: Phân loại sản phẩm.
+  - ...
+
+## Hướng dẫn sử dụng
+
+### Tạo Command và Handler
+
+Sử dụng Artisan command để tạo Command và Handler mới:
+
+1. Tạo Command:
+   ```bash
+   php artisan make:command-bus Auth/ResetPasswordCommand
+   ```
+   Lệnh trên sẽ tạo file `Auth/ResetPasswordCommand.php` trong thư mục `app/Commands/Auth`.
+
+2. Tạo Handler:
+   ```bash
+   php artisan make:command-bus Auth/ResetPasswordHandler --type=handler
+   ```
+   Lệnh trên sẽ tạo file `Auth/ResetPasswordHandler.php` trong thư mục `app/Handlers/Auth`.
+
+### Liên kết Command với Handler
+
+1. Trong file Handler, định nghĩa logic xử lý lệnh:
+   ```php
+   namespace App\Handlers\Auth;
+
+   use App\Commands\Auth\ResetPasswordCommand;
+
+   class ResetPasswordHandler
+   {
+       public function handle(ResetPasswordCommand $command)
+       {
+           // Thực hiện logic reset mật khẩu tại đây.
+       }
+   }
+   ```
+
+2. Trong Command, định nghĩa các thuộc tính cần thiết:
+   ```php
+   namespace App\Commands\Auth;
+
+   class ResetPasswordCommand
+   {
+       public function __construct(public string $email, public string $newPassword)
+       {
+       }
+   }
+   ```
+
+3. Sử dụng Command trong Controller:
+   ```php
+   use App\Commands\Auth\ResetPasswordCommand;
+   use App\Handlers\Auth\ResetPasswordHandler;
+
+   class AuthController
+   {
+       public function resetPassword(Request $request, ResetPasswordHandler $handler)
+       {
+           $command = new ResetPasswordCommand($request->email, $request->new_password);
+           $handler->handle($command);
+
+           return response()->json(['message' => 'Password reset successfully.']);
+       }
+   }
+   ```
+
+## Thêm Command tự động
+
+Sử dụng lệnh sau để khởi tạo nhanh toàn bộ các lớp cần thiết cho một tính năng mới:
+
+```bash
+php artisan make:feature {model}
+```
+Lệnh trên sẽ tự động tạo các file:
+- Controller
+- Requests (Create, Update, Filter)
+- Resources (List, Detail)
+- Command
+- Handler
+
+Ví dụ:
+```bash
+php artisan make:feature User
+```
+
+## Kết luận
+
+Dự án Laravel với Command Bus Design Pattern giúp tăng tính rõ ràng, khả năng mở rộng và bảo trì cho mã nguồn. Hãy làm theo hướng dẫn trên để bắt đầu và phát triển dự án của bạn dễ dàng hơn.

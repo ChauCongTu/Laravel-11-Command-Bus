@@ -1,9 +1,7 @@
 <?php
-namespace App\Commands\Users;
+namespace App\Commands\Auth;
 
-use Illuminate\Support\Str;
-
-class CreateUserCommand
+class RegisterCommand
 {
     private string $email;
     private string $password;
@@ -19,7 +17,7 @@ class CreateUserCommand
     public function __construct(array $data)
     {
         $this->email = $data['email'] ?? null;
-        $this->password = Str::random(12);
+        $this->password = $data['password'] ?? null;
         $this->firstName = $data['firstName'] ?? null;
         $this->lastName = $data['lastName'] ?? null;
         $this->gender = $data['gender'] ?? null;
@@ -47,19 +45,19 @@ class CreateUserCommand
     }
 
     /**
-     * Get the value of firstName
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
      * Get the value of lastName
      */
     public function getLastName()
     {
         return $this->lastName;
+    }
+
+    /**
+     * Get the value of firstName
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
     }
 
     /**

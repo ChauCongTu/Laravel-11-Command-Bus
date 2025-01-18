@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 
-class CreateUserRequest extends FormRequest
+class ResetPasswordRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,16 +17,9 @@ class CreateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|min:5',
-            // 'password' => 'required|min:6|regex:/^(?=.*[a-zA-Z])(?=.*\d).+$/',
-            'firstName' => 'required',
-            'lastName' => 'required',
-            'gender' => 'required|in:0,1,2',
-            'phone' => 'required|numeric',
-            'prefecture' => 'required',
-            'city' => 'required',
-            'address' => 'required',
-            'etcAddress' => 'required',
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
         ];
     }
 

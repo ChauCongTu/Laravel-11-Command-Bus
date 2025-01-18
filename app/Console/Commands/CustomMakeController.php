@@ -239,7 +239,6 @@ class CustomMakeController extends GeneratorCommand
         if ($storeRequestClass !== $updateRequestClass) {
             $namespacedRequests .= PHP_EOL . 'use ' . $namespace . '\\' . $updateRequestClass . ';';
         }
-
         return array_merge($replace, [
             '{{ storeRequest }}' => $storeRequestClass,
             '{{storeRequest}}' => $storeRequestClass,
